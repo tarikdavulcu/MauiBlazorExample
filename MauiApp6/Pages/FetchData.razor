@@ -1,0 +1,46 @@
+﻿@page "/fetchdata"
+
+@using MauiApp6.Data
+@inject WeatherForecastService ForecastService
+
+<h1>Hava Durumu</h1>
+
+<p>Demo Veri</p>
+
+@if (forecasts == null)
+{
+	<p><em>Yükleniyor...</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Tarih</th>
+				<th>Scklık (C)</th>
+				<th>Scklık (F)</th>
+				<th>Özet</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var forecast in forecasts)
+			{
+				<tr>
+					<td>@forecast.Date.ToShortDateString()</td>
+					<td>@forecast.TemperatureC</td>
+					<td>@forecast.TemperatureF</td>
+					<td>@forecast.Summary</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+@code {
+	private WeatherForecast[] forecasts;
+
+	protected override async Task OnInitializedAsync()
+	{
+		forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+	}
+}
